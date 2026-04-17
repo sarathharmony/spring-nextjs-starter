@@ -1,0 +1,34 @@
+---
+description: Parent-app build mode — always consult ace.json before changing services, scripts, or setup.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Parent App Build Mode
+
+You are building a **parent app** — a reusable template other developers
+will clone via `ace createapp <friendly-name>` from the ACE marketplace.
+
+## Source of truth: `ace.json`
+
+Every service, health check, port, and setup step lives in `ace.json`
+at the workspace root. Before adding or changing services, read it.
+
+Key fields:
+- `services[]`: `name`, `cwd`, `start` / `command`, `port`, `healthUrl` / `health_check`, `restartOrder`.
+- `instance_init.setup_script`: path to the shell script run before
+  services start (default `ace-setup.sh`). Keep it idempotent.
+- `parentApp.mode = "build"`: this repo is itself a parent app. Do
+  **not** flip it to `"extend"` unless the user is cloning another
+  parent app into this workspace.
+
+## Workflow
+
+1. Edit `ace.json` to declare the services this parent app exposes.
+2. Add source folders for each service (e.g. `packages/backend`).
+3. Update `ace-setup.sh` with any prerequisite install steps.
+4. Use DevLay's restart controls (they call `POST /api/services/restart`
+  and `POST /api/run-setup` on the engine gateway) to iterate.
+5. When ready, publish from the DevLay publish panel — the friendly
+  name becomes the marketplace handle.

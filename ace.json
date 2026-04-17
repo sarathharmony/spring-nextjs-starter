@@ -1,0 +1,33 @@
+{
+  "version": 3,
+  "name": "spring-nextjs-starter",
+  "description": "Parent-app kit: Rust (axum) backend + Next.js frontend.",
+  "parentApp": { "mode": "build" },
+  "instance_init": { "setup_script": "ace-setup.sh" },
+  "services": [
+    {
+      "name": "backend",
+      "type": "server",
+      "language": "java",
+      "cwd": "packages/backend",
+      "start": "mvn -q spring-boot:run",
+      "command": "mvn -q spring-boot:run",
+      "port": 3000,
+      "healthUrl": "http://localhost:3000/api/health",
+      "health_check": "/api/health",
+      "restartOrder": 1
+    },
+    {
+      "name": "frontend",
+      "type": "server",
+      "language": "typescript",
+      "cwd": "packages/frontend",
+      "start": "pnpm dev",
+      "command": "pnpm dev",
+      "port": 3001,
+      "healthUrl": "http://localhost:3001",
+      "health_check": "/",
+      "restartOrder": 2
+    }
+  ]
+}
