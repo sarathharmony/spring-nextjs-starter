@@ -1,0 +1,11 @@
+node_modules
+.next
+.turbo
+# Maven build output
+packages/backend/target/
+packages/backend/.mvn/wrapper/maven-wrapper.jar
+*.log
+.DS_Store
+.env
+.env.local
+.ace/
